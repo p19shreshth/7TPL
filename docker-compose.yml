@@ -5,34 +5,36 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    volumes:
-      - ./backend:/app
     ports:
       - "5000:5000"
+    volumes:
+      - ./backend:/app
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=postgresql://user:password@db:5432/7tpl
-    depends_on:
-      - db
-
-  db:
-    image: postgres:latest
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=7tpl
 
   frontend:
     build:
       context: ./frontend
-    volumes:
-      - ./frontend:/app
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: 7tpl_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
