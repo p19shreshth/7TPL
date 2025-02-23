@@ -1,3 +1,5 @@
+from app.models import db, User, Project
+
 def generate_dummy_citation():
     return {
         "title": "Sample Title",
@@ -18,3 +20,23 @@ def validate_project_data(data):
 
 def sanitize_input(input_string):
     return input_string.strip()
+
+def create_user(username, email, password):
+    new_user = User(username=username, email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    return new_user
+
+def authenticate_user(email, password):
+    user = User.query.filter_by(email=email, password=password).first()
+    return user
+
+def create_project(title, description, user_id):
+    new_project = Project(title=title, description=description, user_id=user_id)
+    db.session.add(new_project)
+    db.session.commit()
+    return new_project
+
+def get_projects(user_id):
+    projects = Project.query.filter_by(user_id=user_id).all()
+    return projects

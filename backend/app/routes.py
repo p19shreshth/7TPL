@@ -4,6 +4,7 @@ from app.utils import create_user, authenticate_user, create_project, get_projec
 from app.ai.summarizer import summarize_query
 
 bp = Blueprint('routes', __name__)
+main = Blueprint('main', __name__)
 
 @bp.route('/register', methods=['POST'])
 def register():
@@ -40,3 +41,7 @@ def summarize():
     data = request.json
     summary, citations = summarize_query(data['query'])
     return jsonify({"summary": summary, "citations": citations}), 200
+
+@main.route('/')
+def index():
+    return "Hello, World!"

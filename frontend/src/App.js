@@ -1,28 +1,26 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import Dashboard from './components/Dashboard';
-import LoginForm from './components/LoginForm';
-import OnboardingForm from './components/OnboardingForm';
-import ProjectForm from './components/ProjectForm';
 import Sidebar from './components/Sidebar';
-import './styles/App.css';
+import Dashboard from './components/Dashboard';
+import LandingPage from './components/LandingPage';
 
-function App() {
+const App = () => {
+  const items = [
+    { name: 'Dashboard', link: '/dashboard' },
+    { name: 'Landing Page', link: '/' },
+  ];
+
   return (
     <Router>
-      <div className="App">
-        <Sidebar />
+      <div className="app">
+        <Sidebar items={items} />
         <Switch>
-          <Route path="/" exact component={LandingPage} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/login" component={LoginForm} />
-          <Route path="/onboarding" component={OnboardingForm} />
-          <Route path="/project" component={ProjectForm} />
+          <Route path="/" component={LandingPage} />
         </Switch>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

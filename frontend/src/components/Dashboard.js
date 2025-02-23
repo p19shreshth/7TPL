@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { fetchProjects } from '../services/api';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 
 const Dashboard = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchProjects = async () => {
+        const response = await fetch('/api/projects');
+        const data = await response.json();
+        setProjects(data);
+    };
+
     useEffect(() => {
         const loadProjects = async () => {
             try {
-                const data = await fetchProjects();
-                setProjects(data);
+                await fetchProjects();
             } catch (error) {
                 console.error("Error fetching projects:", error);
             } finally {
@@ -27,19 +31,18 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <h1>Your Projects</h1>
-            {projects.length === 0 ? (
-                <p>No active projects found. Create a new project to get started!</p>
-            ) : (
-                <ul>
-                    {projects.map(project => (
-                        <li key={project.id}>
-                            <h2>{project.title}</h2>
-                            <p>{project.description}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
+            <h1 className="dashboard-header">Dashboard</h1>
+            <div className="dashboard-content">
+                {projects.length > 0 ? (
+                    projects.map((project, index) => (
+                        <div key={index} className="dashboard-item">
+                            {project.name}
+                        </div>
+                    ))
+                ) : (
+                    <div>No projects available</div>
+                )}
+            </div>
         </div>
     );
 };
