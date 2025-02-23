@@ -40,3 +40,21 @@ def create_project(title, description, user_id):
 def get_projects(user_id):
     projects = Project.query.filter_by(user_id=user_id).all()
     return projects
+
+def get_search_suggestions(query):
+    suggestions = ["AI", "Machine Learning", "Deep Learning", "NLP"]
+    return [s for s in suggestions if query.lower() in s.lower()]
+
+def search_query(query, filter, sort):
+    results = [
+        {"title": "AI in Healthcare"},
+        {"title": "Machine Learning Basics"},
+        {"title": "Deep Learning Advances"}
+    ]
+    if filter:
+        results = [r for r in results if filter.lower() in r['title'].lower()]
+    if sort == 'asc':
+        results.sort(key=lambda x: x['title'])
+    elif sort == 'desc':
+        results.sort(key=lambda x: x['title'], reverse=True)
+    return results
